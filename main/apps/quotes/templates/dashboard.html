@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>My Quotes App</title>
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Syntax for loading static stylesheet in static folder -->
+                        <!-- {% load static %}
+	                    <link rel="stylesheet" href="{% static 'wish/css/style.css' %}" media="screen" title="no title"  charset="utf-8"> -->
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script> 
+</head>
+<body>
+<div class="container">
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+	    <div class="navbar-header">
+	      <p class="navbar-brand">
+	      	Hello, {{ user.name }}</p>
+	      <p class="navbar-brand"><a href="/logout">Logout</a></p>
+	    </div>
+	  </div>
+	</nav>
+	<div class="container">
+		<h3>My Favorite Quotes:</h3>
+		<table class="table">
+			<thead class="thead-default">
+    			<tr>
+      				<th>Quoted By</th>
+      				<th>Quote</th>
+    			</tr>
+    		</thead>
+            {% for quotes in myownquotes %}
+            <tr>
+                <td><span class="cap"><a href="wish_items/{{ quotes.id }}">{{ quotes.quoted_by }}</a></span></td>
+                <td>{{ quotes.quote_text}}</td>
+                <td>{{ item.end.date}}</td>
+                <td>{{item.description}}</td>
+                <td><a href="/remove/{{ quotes.id }}">Remove from my Favorites</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+       
+    
+        <h3>Quote Wall</h3>
+        <th></th>
+		<table class="table">
+			<thead class="thead-default">
+    		</thead>
+    			{% for quotes in myfavlist %}
+    			<tr>
+                <td><span class="cap"><a href="wish_items/{{ quotes.id }}">{{ quotes.quoted_by }}</a></span></td>
+                <td>{{ quotes.quote_text}}</td>
+    			<td><a href="add/{{ quotes.id }}">Join</a></td>
+    			</tr>
+    			{% endfor %}
+		</table>
+
+    </div>
+    <div class="container">
+        <form action="/add" method="post">
+          {% csrf_token %}
+          <h3>Add a Quote to the Wall</h3>
+          {% if messages %}
+              <ul class="messages">
+                  {% for message in messages %}
+                     <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                  {% endfor %}
+              </ul>
+          {% endif %}
+          <div class="form-group">
+            <label>Quoted By:</label>
+            <input type="hidden" name="uid" value="{{ request.session.id }}">
+            <input type="text" name="quotedby" class="form-control">
+            <label>Quote</label>
+            <p><input type="text" name ="quotetext" class ="form-control"></p>
+            <input type="submit" name="submit" value="Add" class="btn btn-primary">
+        </form>
+</div>
+</body>
+</html>
