@@ -1,3 +1,0 @@
-# quotesapp
-# quotesapp
-# quotesapp
